@@ -10,11 +10,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction("t0001", "clothing", 34.54, DateTime(2022, 4, 18)),
-    Transaction("t0002", "shoes", 18.04, DateTime(2022, 3, 18)),
-    Transaction("t0003", "glasses", 908.00, DateTime(2022, 2, 01)),
-  ];
+  final List<Transaction> _transactions = [];
 
   void _onPressAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
@@ -36,7 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Log Your Expense!"),
+        title: Text("Log Your Expense!",
+            style: Theme.of(context).textTheme.titleMedium),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -65,12 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).backgroundColor,
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).primaryColor,
-        ),
+        child: Icon(Icons.add),
         onPressed: () => {_onPressAddNewTransaction(context)},
       ),
     );

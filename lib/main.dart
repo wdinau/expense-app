@@ -14,8 +14,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
+          primarySwatch: Colors.deepPurple,
+          fontFamily: 'OpenSans',
+          appBarTheme: AppBarTheme.of(context).copyWith(
+              titleTextStyle: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold))),
       home: MyHomePage(),
     );
   }
