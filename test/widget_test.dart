@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:expense_app/main.dart';
+import 'package:fpdart/fpdart.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -27,4 +28,14 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+
+  testWidgets('dart list bug', (WidgetTester tester) async {
+
+       final d1 = DateTime(2001, 1, 1);
+       final d2 = DateTime(2001, 1, 2);
+       final m = {}.upsertAt(dateEqYear)(d1, 1).upsertAt(dateEqYear)(d2, 2);
+
+       print(m);
+
+   });
 }

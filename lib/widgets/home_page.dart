@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
+import 'chart.dart';
 import 'new_transaction.dart';
 import 'transaction_list.dart';
 
@@ -53,10 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(2),
               child: Card(
-                elevation: 5,
-                color: Theme.of(context).cardColor,
-                child: Text("Chart is here"),
-              ),
+                  elevation: 5,
+                  color: Theme.of(context).cardColor,
+                  child: Chart(_transactions)),
             ),
             TransactionList(_transactions),
           ],
