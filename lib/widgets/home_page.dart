@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
@@ -22,8 +24,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _addNewTransaction(double amount, String title) {
-    final newTx =
-        Transaction(DateTime.now().toString(), title, amount, DateTime.now());
+    final newTx = Transaction(DateTime.now().toString(), title, amount,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7))));
     setState(() {
       _transactions.add(newTx);
     });
@@ -33,8 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Log Your Expense!",
-            style: Theme.of(context).textTheme.titleMedium),
+        title: Text("Log Your Expense!"),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
