@@ -13,7 +13,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [];
+  // final List<Transaction> _transactions = [];
+  final List<Transaction> _transactions = [
+    Transaction(DateTime.now().toString(), "new shoes", 475.22,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
+    Transaction(DateTime.now().toString(), "small something something", 2.22,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
+    Transaction(DateTime.now().toString(), "very large rubber ducky", 23475.9,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
+    Transaction(DateTime.now().toString(), "dr. glove stuff", 13.90,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
+    Transaction(DateTime.now().toString(), "somewhat expensive stuff", 3413.90,
+        DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
+  ];
 
   void _onPressAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(

@@ -19,10 +19,13 @@ class Chart extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: groupedTransactionsLast7Days.map((tx) {
-            return ChartBar(
-              tx["weekday"].toString(),
-              tx["amount"] as double,
-              getPercentageOfTotal(tx),
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                tx["weekday"].toString(),
+                tx["amount"] as double,
+                getPercentageOfTotal(tx),
+              ),
             );
           }).toList(),
         ));

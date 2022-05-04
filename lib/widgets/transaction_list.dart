@@ -32,37 +32,24 @@ class TransactionList extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Card(
                   elevation: 4,
-                  margin: EdgeInsets.all(4),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 10),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 2),
-                            ),
+                  child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 30,
+                        child: Padding(
+                          padding: EdgeInsets.all(4),
+                          child: FittedBox(
                             child: Text(
-                              "\$${transactions[index].amount.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(transactions[index].title,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            Text(
-                                DateFormat("yMMMd")
-                                    .format(transactions[index].dateTime),
-                                style: TextStyle(
-                                    color: Theme.of(context).hintColor,
-                                    decorationStyle:
-                                        TextDecorationStyle.dotted))
-                          ],
-                        )
-                      ]),
+                                "\$${transactions[index].amount.toStringAsFixed(2)}"),
+                          ),
+                        ),
+                      ),
+                      title: Text(transactions[index].title),
+                      subtitle: Text(
+                          DateFormat("yMMMd")
+                              .format(transactions[index].dateTime),
+                          style: TextStyle(
+                              color: Theme.of(context).hintColor,
+                              decorationStyle: TextDecorationStyle.dotted))),
                 );
               },
             ),
