@@ -5,8 +5,9 @@ import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function deleteTransaction;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this.deleteTransaction);
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +34,32 @@ class TransactionList extends StatelessWidget {
                 return Card(
                   elevation: 4,
                   child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: Padding(
-                          padding: EdgeInsets.all(4),
-                          child: FittedBox(
-                            child: Text(
-                                "\$${transactions[index].amount.toStringAsFixed(2)}"),
-                          ),
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Theme.of(context).backgroundColor),
+                      height: 300,
+                      child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: FittedBox(
+                          child: Text(
+                              "\$${transactions[index].amount.toStringAsFixed(2)}"),
                         ),
                       ),
-                      title: Text(transactions[index].title),
-                      subtitle: Text(
-                          DateFormat("yMMMd")
-                              .format(transactions[index].dateTime),
-                          style: TextStyle(
-                              color: Theme.of(context).hintColor,
-                              decorationStyle: TextDecorationStyle.dotted))),
+                    ),
+                    title: Text(transactions[index].title),
+                    subtitle: Text(
+                        DateFormat("yMMMd")
+                            .format(transactions[index].dateTime),
+                        style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                            decorationStyle: TextDecorationStyle.dotted)),
+                    trailing: IconButton(
+                        onPressed: () => deleteTransaction(index),
+                        icon: Icon(
+                          Icons.delete,
+                        )),
+                  ),
                 );
               },
             ),

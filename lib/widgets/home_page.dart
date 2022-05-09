@@ -17,7 +17,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
     Transaction(DateTime.now().toString(), "new shoes", 475.22,
         DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
-    Transaction(DateTime.now().toString(), "small something something", 2.22,
+    Transaction(
+        DateTime.now().toString(),
+        "small something something very very long and super long and see how this one goes",
+        2.22,
         DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
     Transaction(DateTime.now().toString(), "very large rubber ducky", 23475.9,
         DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
@@ -35,11 +38,17 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void _addNewTransaction(double amount, String title) {
-    final newTx = Transaction(DateTime.now().toString(), title, amount,
-        DateTime.now().subtract(Duration(days: Random().nextInt(7))));
+  void _addNewTransaction(double amount, String title, DateTime dateTime) {
+    final newTx =
+        Transaction(DateTime.now().toString(), title, amount, dateTime);
     setState(() {
       _transactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(int index) {
+    setState(() {
+      _transactions.removeAt(index);
     });
   }
 
@@ -71,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Theme.of(context).cardColor,
                   child: Chart(_transactions)),
             ),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _deleteTransaction),
           ],
         ),
       ),

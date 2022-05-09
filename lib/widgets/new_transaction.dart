@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
-
   NewTransaction(this.addNewTransaction);
 
   @override
@@ -10,17 +12,33 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final titleInputController = TextEditingController();
-
-  final amountInputController = TextEditingController();
+  final _titleInputController = TextEditingController();
+  final _amountInputController = TextEditingController();
+  DateTime _datePicked = DateTime.now();
 
   void _onSubmit() {
-    var amount = double.parse(amountInputController.text);
-    var title = titleInputController.text;
+    var amount = double.parse(_amountInputController.text);
+    var title = _titleInputController.text;
 
     if (amount <= 0 || title.isEmpty) return;
-    widget.addNewTransaction(amount, title);
+    widget.addNewTransaction(amount, title, _datePicked);
     Navigator.of(context).pop();
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: _datePicked,
+            firstDate: DateTime.now().subtract(Duration(days: 300)),
+            lastDate: DateTime.now().add(Duration(days: 300)))
+        .then(_onDatePicked);
+  }
+
+  FutureOr<Null> _onDatePicked(datePicked) {
+    if (datePicked == null) return null;
+    setState(() {
+      _datePicked = datePicked;
+    });
   }
 
   @override
@@ -33,16 +51,24 @@ class _NewTransactionState extends State<NewTransaction> {
           TextField(
             autocorrect: true,
             decoration: InputDecoration(labelText: "Item Title"),
-            controller: titleInputController,
+            controller: _titleInputController,
             onSubmitted: (_) => _onSubmit,
           ),
           TextField(
             decoration: InputDecoration(labelText: "Amount"),
-            controller: amountInputController,
+            controller: _amountInputController,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             onSubmitted: (_) => _onSubmit,
           ),
+          Row(
+            children: [
+              Expanded(child: Text(DateFormat.yMMMd().format(_datePicked))),
+              TextButton(
+                  onPressed: _presentDatePicker, child: Text("Pick a date")),
+            ],
+          ),
           TextButton(
+              // style: ButtonStyle(alignment: Alignment.bottomRight),
               onPressed: _onSubmit,
               child: Text(
                 "Add Transaction",

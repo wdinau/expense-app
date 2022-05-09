@@ -13,17 +13,18 @@ class ChartBar extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(amount.toString()),
+        Container(height: 20, child: Text(amount.toString())),
         Container(
             width: 20,
             height: fullBarHeight,
-            color: Theme.of(context).backgroundColor,
             alignment: Alignment.bottomCenter,
+            decoration: BoxDecoration(
+                // borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: Theme.of(context).backgroundColor),
             child: Container(
-              width: double.infinity,
-              height: percentageOfTotal * fullBarHeight,
-              color: Theme.of(context).primaryColor,
-            )),
+                width: double.infinity,
+                height: percentageOfTotal * fullBarHeight,
+                color: Theme.of(context).primaryColor)),
         Text(label)
       ],
     );
