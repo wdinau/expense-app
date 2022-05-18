@@ -14,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // final List<Transaction> _transactions = [];
+
   final List<Transaction> _transactions = [
     Transaction(DateTime.now().toString(), "new shoes", 475.22,
         DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
@@ -29,6 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Transaction(DateTime.now().toString(), "somewhat expensive stuff", 3413.90,
         DateTime.now().subtract(Duration(days: Random().nextInt(7)))),
   ];
+
+  bool _displayChart = false;
 
   void _onPressAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
@@ -52,37 +55,67 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _onSwitchChanged(newValue) {
+    setState(() {
+      _displayChart = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text("Log Your Expense!"),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {},
+        )
+      ],
+    );
+
+    var _switcherWidget =
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text("Chart View"),
+      Switch(
+        onChanged: _onSwitchChanged,
+        value: _displayChart,
+      )
+    ]);
+
+    var _chartWidget = Container(
+      color: Theme.of(context).canvasColor,
+      height: MediaQuery.of(context).size.height *
+              (MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 0.3
+                  : 0.7) -
+          appBar.preferredSize.height,
+      width: double.infinity,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(2),
+      child: Card(
+          elevation: 5,
+          color: Theme.of(context).cardColor,
+          child: Chart(_transactions)),
+    );
+
+    var _transactionListViewWidget = Container(
+        height: MediaQuery.of(context).size.height * 0.7 -
+            appBar.preferredSize.height,
+        child: TransactionList(_transactions, _deleteTransaction));
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Log Your Expense!"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {},
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         primary: true,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              color: Theme.of(context).canvasColor,
-              // width: double.infinity,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(2),
-              child: Card(
-                  elevation: 5,
-                  color: Theme.of(context).cardColor,
-                  child: Chart(_transactions)),
-            ),
-            TransactionList(_transactions, _deleteTransaction),
-          ],
-        ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: MediaQuery.of(context).orientation == Orientation.portrait
+                ? [_chartWidget, _transactionListViewWidget]
+                : [
+                    _switcherWidget,
+                    _displayChart ? _chartWidget : _transactionListViewWidget
+                  ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(

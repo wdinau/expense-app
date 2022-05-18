@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
 
 import 'widgets/home_page.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
