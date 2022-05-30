@@ -14,20 +14,20 @@ class ChartBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-              height: constraint.maxHeight * 0.1,
+              height: constraint.maxHeight * 0.15,
               child: Text(amount.toString())),
           Container(
               width: 20,
-              height: constraint.maxHeight * 0.8,
+              height: constraint.maxHeight * 0.7,
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
                   // borderRadius: BorderRadius.all(Radius.circular(8)),
                   color: Theme.of(context).backgroundColor),
               child: Container(
                   width: double.infinity,
-                  height: percentageOfTotal * (constraint.maxHeight * 0.8),
+                  height: percentageOfTotal * (constraint.maxHeight * 0.7),
                   color: Theme.of(context).primaryColor)),
-          SizedBox(height: constraint.maxHeight * 0.1, child: Text(label))
+          SizedBox(height: constraint.maxHeight * 0.15, child: Text(label))
         ],
       );
     });
