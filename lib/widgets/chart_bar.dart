@@ -9,7 +9,6 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final double fullBarHeight = MediaQuery.of(context).size.height * 0.20;
     return LayoutBuilder(builder: (context, constraint) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

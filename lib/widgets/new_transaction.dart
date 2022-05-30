@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:expense_app/widgets/adaptive_flat_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'adaptive_button.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
@@ -68,16 +72,10 @@ class _NewTransactionState extends State<NewTransaction> {
             Row(
               children: [
                 Expanded(child: Text(DateFormat.yMMMd().format(_datePicked))),
-                TextButton(
-                    onPressed: _presentDatePicker, child: Text("Pick a date")),
+                AdaptiveFlatButton("Pick a date", _presentDatePicker)
               ],
             ),
-            TextButton(
-                // style: ButtonStyle(alignment: Alignment.bottomRight),
-                onPressed: _onSubmit,
-                child: Text(
-                  "Add Transaction",
-                ))
+            AdaptiveButton("Add Transaction", _onSubmit)
           ],
         ),
       ),
