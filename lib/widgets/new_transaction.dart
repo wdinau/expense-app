@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
+
   NewTransaction(this.addNewTransaction);
 
   @override
@@ -43,37 +44,42 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            autocorrect: true,
-            decoration: InputDecoration(labelText: "Item Title"),
-            controller: _titleInputController,
-            onSubmitted: (_) => _onSubmit,
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: "Amount"),
-            controller: _amountInputController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onSubmitted: (_) => _onSubmit,
-          ),
-          Row(
-            children: [
-              Expanded(child: Text(DateFormat.yMMMd().format(_datePicked))),
-              TextButton(
-                  onPressed: _presentDatePicker, child: Text("Pick a date")),
-            ],
-          ),
-          TextButton(
-              // style: ButtonStyle(alignment: Alignment.bottomRight),
-              onPressed: _onSubmit,
-              child: Text(
-                "Add Transaction",
-              ))
-        ],
+    var viewInsertsBottom = MediaQuery.of(context).viewInsets.bottom;
+    print("view insets bottom " + viewInsertsBottom.toString());
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.only(
+            top: 10, left: 10, right: 10, bottom: viewInsertsBottom + 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              autocorrect: true,
+              decoration: InputDecoration(labelText: "Item Title"),
+              controller: _titleInputController,
+              onSubmitted: (_) => _onSubmit,
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: "Amount"),
+              controller: _amountInputController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (_) => _onSubmit,
+            ),
+            Row(
+              children: [
+                Expanded(child: Text(DateFormat.yMMMd().format(_datePicked))),
+                TextButton(
+                    onPressed: _presentDatePicker, child: Text("Pick a date")),
+              ],
+            ),
+            TextButton(
+                // style: ButtonStyle(alignment: Alignment.bottomRight),
+                onPressed: _onSubmit,
+                child: Text(
+                  "Add Transaction",
+                ))
+          ],
+        ),
       ),
     );
   }

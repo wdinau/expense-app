@@ -36,35 +36,38 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (context, index) {
+                final themeData = Theme.of(context);
+                var mediaQueryData = MediaQuery.of(context);
+
                 return Card(
                   elevation: 4,
                   child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Theme.of(context).backgroundColor),
-                      height: 300,
-                      child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: FittedBox(
-                          child: Text(
-                              "\$${transactions[index].amount.toStringAsFixed(2)}"),
+                      leading: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: themeData.backgroundColor),
+                        height: 300,
+                        child: Padding(
+                          padding: EdgeInsets.all(4),
+                          child: FittedBox(
+                            child: Text(
+                                "\$${transactions[index].amount.toStringAsFixed(2)}"),
+                          ),
                         ),
                       ),
-                    ),
-                    title: Text(transactions[index].title),
-                    subtitle: Text(
-                        DateFormat("yMMMd")
-                            .format(transactions[index].dateTime),
-                        style: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            decorationStyle: TextDecorationStyle.dotted)),
-                    trailing: IconButton(
-                        onPressed: () => deleteTransaction(index),
-                        icon: Icon(
-                          Icons.delete,
-                        )),
-                  ),
+                      title: Text(transactions[index].title),
+                      subtitle: Text(
+                          DateFormat("yMMMd")
+                              .format(transactions[index].dateTime),
+                          style: TextStyle(
+                              color: themeData.hintColor,
+                              decorationStyle: TextDecorationStyle.dotted)),
+                      trailing: mediaQueryData.size.width > 460
+                          ? TextButton.icon(
+                              onPressed: () => deleteTransaction(index),
+                              icon: Icon(Icons.delete),
+                              label: Text("Delete"))
+                          : Icon(Icons.delete)),
                 );
               },
             ),

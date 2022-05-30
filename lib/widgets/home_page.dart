@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
@@ -73,13 +75,29 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    final cupertinoNavBar = CupertinoNavigationBar(
+      middle: Text("Personal Expense"),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CupertinoButton(
+              child: Icon(CupertinoIcons.add),
+              onPressed: () => {_onPressAddNewTransaction(context)}),
+        ],
+      ),
+    );
+
     var _switcherWidget =
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text("Chart View"),
-      Switch(
+      Text(
+        "Chart View",
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      Switch.adaptive(
+        activeColor: Theme.of(context).toggleableActiveColor,
         onChanged: _onSwitchChanged,
         value: _displayChart,
-      )
+      ),
     ]);
 
     var _chartWidget = Container(
@@ -88,7 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
               (MediaQuery.of(context).orientation == Orientation.portrait
                   ? 0.3
                   : 0.7) -
-          appBar.preferredSize.height,
+          (Platform.isIOS
+              ? cupertinoNavBar.preferredSize.height
+              : appBar.preferredSize.height),
       width: double.infinity,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(2),
@@ -100,28 +120,42 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var _transactionListViewWidget = Container(
         height: MediaQuery.of(context).size.height * 0.7 -
-            appBar.preferredSize.height,
+            (Platform.isIOS
+                ? cupertinoNavBar.preferredSize.height
+                : appBar.preferredSize.height),
         child: TransactionList(_transactions, _deleteTransaction));
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    var pageWidget = Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: MediaQuery.of(context).orientation == Orientation.portrait
+            ? [_chartWidget, _transactionListViewWidget]
+            : [
+                _switcherWidget,
+                _displayChart ? _chartWidget : _transactionListViewWidget
+              ]);
+    var pageBodyWidget = SafeArea(
+      child: SingleChildScrollView(
         primary: true,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: MediaQuery.of(context).orientation == Orientation.portrait
-                ? [_chartWidget, _transactionListViewWidget]
-                : [
-                    _switcherWidget,
-                    _displayChart ? _chartWidget : _transactionListViewWidget
-                  ]),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => {_onPressAddNewTransaction(context)},
+        child: pageWidget,
       ),
     );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBodyWidget,
+            navigationBar: cupertinoNavBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageBodyWidget,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => {_onPressAddNewTransaction(context)},
+                  ),
+          );
   }
 }
