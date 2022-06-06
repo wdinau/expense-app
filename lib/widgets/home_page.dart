@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   // final List<Transaction> _transactions = [];
 
   final List<Transaction> _transactions = [
@@ -35,6 +35,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _displayChart = false;
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    print("didChangeAppLifecycleState ${state.name}");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('dispose');
+    WidgetsBinding.instance?.removeObserver(this);
+  }
+
   void _onPressAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
@@ -51,9 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _deleteTransaction(int index) {
+  void _deleteTransaction(String txId) {
     setState(() {
-      _transactions.removeAt(index);
+      _transactions.removeWhere((element) => txId == element.id);
     });
   }
 
@@ -65,6 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var _isLandscapeMode =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     final appBar = AppBar(
       title: Text("Log Your Expense!"),
       actions: [
@@ -74,7 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ],
     );
-
     final cupertinoNavBar = CupertinoNavigationBar(
       middle: Text("Personal Expense"),
       trailing: Row(
@@ -102,13 +123,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var _chartWidget = Container(
       color: Theme.of(context).canvasColor,
-      height: MediaQuery.of(context).size.height *
-              (MediaQuery.of(context).orientation == Orientation.portrait
-                  ? 0.3
-                  : 0.7) -
-          (Platform.isIOS
-              ? cupertinoNavBar.preferredSize.height
-              : appBar.preferredSize.height),
+      height:
+          MediaQuery.of(context).size.height * (_isLandscapeMode ? 0.3 : 0.7) -
+              (Platform.isIOS
+                  ? cupertinoNavBar.preferredSize.height
+                  : appBar.preferredSize.height),
       width: double.infinity,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(2),
@@ -125,29 +144,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 : appBar.preferredSize.height),
         child: TransactionList(_transactions, _deleteTransaction));
 
-    var pageWidget = Column(
+    var _pageWidget = Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: MediaQuery.of(context).orientation == Orientation.portrait
+        children: _isLandscapeMode
             ? [_chartWidget, _transactionListViewWidget]
             : [
                 _switcherWidget,
                 _displayChart ? _chartWidget : _transactionListViewWidget
               ]);
-    var pageBodyWidget = SafeArea(
+
+    var _pageBodyWidget = SafeArea(
       child: SingleChildScrollView(
         primary: true,
-        child: pageWidget,
+        child: _pageWidget,
       ),
     );
+
     return Platform.isIOS
         ? CupertinoPageScaffold(
-            child: pageBodyWidget,
+            child: _pageBodyWidget,
             navigationBar: cupertinoNavBar,
           )
         : Scaffold(
             appBar: appBar,
-            body: pageBodyWidget,
+            body: _pageBodyWidget,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Platform.isIOS

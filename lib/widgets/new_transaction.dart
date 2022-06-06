@@ -10,16 +10,44 @@ import 'adaptive_button.dart';
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
 
-  NewTransaction(this.addNewTransaction);
+  NewTransaction(this.addNewTransaction) {
+    print('NewTransaction');
+  }
 
   @override
-  State<NewTransaction> createState() => _NewTransactionState();
+  State<NewTransaction> createState() {
+    print('NewTransaction.createState');
+    return _NewTransactionState();
+  }
 }
 
 class _NewTransactionState extends State<NewTransaction> {
   final _titleInputController = TextEditingController();
   final _amountInputController = TextEditingController();
   DateTime _datePicked = DateTime.now();
+
+  _NewTransactionState() {
+    print('_NewTransactionState');
+  }
+
+  @override
+  void initState() {
+    //fetching initial data
+    super.initState();
+    print("_NewTransactionState.initState");
+  }
+
+  @override
+  void didUpdateWidget(covariant NewTransaction oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("_NewTransactionState.didUpdateWidget");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("_NewTransactionState.dispose");
+  }
 
   void _onSubmit() {
     var amount = double.parse(_amountInputController.text);
@@ -48,12 +76,12 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    var viewInsertsBottom = MediaQuery.of(context).viewInsets.bottom;
-    print("view insets bottom " + viewInsertsBottom.toString());
+    print("_NewTransactionState.build");
+    var viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.only(
-            top: 10, left: 10, right: 10, bottom: viewInsertsBottom + 10),
+            top: 10, left: 10, right: 10, bottom: viewInsetsBottom + 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
